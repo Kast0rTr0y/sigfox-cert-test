@@ -6,7 +6,7 @@ import pycom
 
 ## select the test you want to run by (un)commenting
 # test = "TX-BPSK"
-test = "TX-PROTOCOL Protocol"
+test = "TX-PROTOCOL Protocol" # ca 123 seconds
 # test = "TX-PROTOCOL Uplink Encrypted Payload"
 # test = "TX-PROTOCOL NVM"
 # test = "TX-PROTOCOL Frequency Distribution"
@@ -73,6 +73,15 @@ elif test == "TX-PROTOCOL Protocol":
     s.send(bytes([0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49]))
     s.send(bytes([0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A ]))
     s.send(bytes([0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B ]))
+
+    # use the socket to send a Sigfox Out Of Band message
+    s.setsockopt(socket.SOL_SIGFOX, socket.SO_OOB, True)
+    # send 1 bit
+    s.setsockopt(socket.SOL_SIGFOX, socket.SO_BIT, True)
+    s.send('')
+    s.setsockopt(socket.SOL_SIGFOX, socket.SO_BIT, False)
+    # disable Out-Of-Band to use the socket normally
+    s.setsockopt(socket.SOL_SIGFOX, socket.SO_OOB, False)
 elif test == "TX-PROTOCOL Uplink Encrypted Payload":
     print("todo")
 elif test == "TX-PROTOCOL NVM":
