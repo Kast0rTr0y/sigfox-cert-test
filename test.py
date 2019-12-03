@@ -30,8 +30,13 @@ SFX_TEST_MODE_TX_SYNTH    = 5
 RCZ = Sigfox.RCZ1
 
 sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=RCZ)
+print("sigfox version:", sigfox.version())
+print("sigfox ID:", ubinascii.hexlify(sigfox.id()))
+print("sigfox PAC:", ubinascii.hexlify(sigfox.pac()))
+print("sigfox region:", RCZ)
+
 sigfox.public_key(True)
-# sigfox.public_key(False)
+print("sigfox public key", sigfox.public_key())
 
 s = socket.socket(socket.AF_SIGFOX, socket.SOCK_RAW)
 s.setblocking(True)
@@ -43,12 +48,7 @@ else:
     # configure it as uplink only
     print("sigfox link:", "uplink only")
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
-​
 
-print("sigfox ID:", ubinascii.hexlify(sigfox.id()))
-print("sigfox PAC:", ubinascii.hexlify(sigfox.pac()))
-print("sigfox public key:", sigfox.public_key())
-print("sigfox region:", RCZ)
 print("test:", test)​
 
 
