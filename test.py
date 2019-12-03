@@ -8,10 +8,16 @@ import pycom
 # test = "TX-BPSK"
 test = "TX-PROTOCOL Protocol" # ca 123 seconds
 # test = "TX-PROTOCOL Uplink Encrypted Payload"
-# test = "TX-PROTOCOL NVM"
-# test = "TX-PROTOCOL Frequency Distribution"
-test = "Peter"
-test = "Downlink"
+test = "TX-PROTOCOL NVM"
+# test = "TX-PROTOCOL Public Key"
+# test = "TX-PROTOCOL Frequency Distribution" # 4156 seconds (!) 1hour 9minutes
+# test = "RX-PROTOCOL Downlink"
+# test = "RX-GFSK"
+# test = "RX-SENSI"
+# test = "TX-SYNTH"
+
+# test = "Peter"
+# test = "Downlink"
 
 
 # test mode constants for sigfox api
@@ -92,6 +98,19 @@ elif test == "TX-PROTOCOL Public Key":
     sigfox.public_key(False)
 elif test == "TX-PROTOCOL Frequency Distribution":
     e = sigfox.test_mode(SFX_TEST_MODE_TX_PROTOCOL, 34) # stupid question? should it be 0x34 ? who knows
+    print(e)
+elif test == "RX-PROTOCOL Downlink":
+    e = sigfox.test_mode(SFX_TEST_MODE_RX_PROTOCOL, 1)
+    print(e)
+elif test == "RX-GFSK":
+    e = sigfox.test_mode(SFX_TEST_MODE_RX_GFSK, 30) # hex or dec 30?
+    print(e)
+    print("rssi", sigfox.rssi())
+elif test == "RX-SENSI":
+    e = sigfox.test_mode(SFX_TEST_MODE_RX_SENSI, 100) # hex or dec 100?
+    print(e)
+elif test == "TX-SYNTH":
+    e = sigfox.test_mode(SFX_TEST_MODE_TX_SYNTH, 0)
     print(e)
 
 elif test == "Peter":
