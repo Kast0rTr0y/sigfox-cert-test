@@ -1,7 +1,20 @@
 from network import Sigfox
+import pycom
 import utime
-sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=Sigfox.RCZ1)
+
+def cw(f):
+    print("continous", f, " Hz for", s, "seconds")
+    pycom.rgbled(0x001100)
+    sigfox.cw( f, True)
+    utime.sleep(s)
+    sigfox.cw( f, False)
+
+pycom.heartbeat(False)
+sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=Sigfox.RCZ2 )
 print(sigfox.frequencies())
-sigfox.cw( sigfox.frequencies()[0], True)
-utime.sleep(10)
-sigfox.cw( sigfox.frequencies()[0], False)
+s = 10
+
+cw(sigfox.frequencies()[0])
+# cw(sigfox.frequencies()[1])
+
+pycom.heartbeat(True)
