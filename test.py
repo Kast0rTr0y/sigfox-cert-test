@@ -16,7 +16,7 @@ import machine
 # test = "UL - Protocol" # [2 minutes]
 # test = "UL - Non Volatile Memory" # ManualVerdict
 # test = "UL - Public Key"
-test = "UL - Frequency Distribution" # [<= 15 minutes]
+# test = "UL - Frequency Distribution" # [<= 15 minutes]
 # test = "UL - Frequency Synthesis"  ## [<= 2 minutes]
 ## Downlink:
 #test = "DL - Downlink" # Use for any of "DL-Protocol", "DL-Start of Listening" and "DL-End of Listening"
@@ -33,7 +33,7 @@ test = "MyTest"
 
 ##############################################################
 # ## select the region
-RCZ = Sigfox.RCZ3
+RCZ = Sigfox.RCZ1
 
 
 # RCZ1
@@ -90,19 +90,15 @@ sigfox.info() # normally prints nothing, but patched FW prints private key
 # sigfox.config((3,5000,0))
 print("sigfox config:", sigfox.config()) # after reset RCZ3 defaults to (3, 5000, 0)
 
-#sigfox.public_key(True)
+# by default put the device into private key mode
+sigfox.public_key(False)
 print("sigfox public key", sigfox.public_key())
 
 s = socket.socket(socket.AF_SIGFOX, socket.SOCK_RAW)
 s.setblocking(True)
-if ( test == "MyDownlink" ):
-    # configure socket as uplink + downlink
-    print("socket:", "up and down")
-    s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, True)
-else:
-    # configure socket as uplink only
-    print("socket:", "uplink only")
-    s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
+# by default configure socket as uplink only
+# print("socket:", "uplink only")
+s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
 
 print("test:", test)
 ################################################################################
@@ -137,7 +133,7 @@ def send(msg):
             sleep(wait - wait_so_far)
     else:
         pass
-        sleep(1)
+        #sleep(1)
     print("send", ubinascii.hexlify(msg))
     pycom.rgbled(rgb_send)
     last = utime.time()
@@ -277,23 +273,38 @@ elif test == "MyTest":
     # #send(bytes([1,2,3,4,5,6,7,8,9,0xa,0xb,0xc]))
     # send(bytes([7]))
     # print("b")
-    for b in range(0, 100):
+    r = machine.rng() & 0xff
+    for b in range(0, 2):
         x = utime.time()
         d = b % ( 0xff + 1 )
-        retval = send(bytes([d]))
+        retval = send(bytes([0xaa, r, d]))
         print("sent after", utime.time() -x, "seconds")
         print("retval", retval)
         #sleep(2)
 elif test == "MyDownlink":
-    x = utime.time()
-    retval = send(bytes([0x0f]))
-    print("sent after", utime.time() -x, "seconds")
-    print("retval", retval)
-    x = utime.time()
-    input = s.recv(8)
-    print("received after", utime.time() -x, "seconds")
-    print("input", ubinascii.hexlify(input))
-    print("rssi", sigfox.rssi())
+    r = machine.rng() & 0xff
+    rssis = {}
+    # configure socket as uplink + downlink
+    print("reconfiguring socket to RX mode (ie up AND down)")
+    s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, True)
+    print("reconfiguring sigfox to use public key")
+    sigfox.public_key(True)
+    for b in range(0, 4):
+        x = utime.time()
+        d = b % ( 0xff + 1 )
+        retval = send(bytes([0xdd, r, d]))
+        print("sent after", utime.time() -x, "seconds")
+        print("retval", retval)
+        x = utime.time()
+        received = s.recv(8)
+        print("received after", utime.time() -x, "seconds")
+        print("received:", ubinascii.hexlify(received))
+        rssi = sigfox.rssi()
+        print("rssi", rssi)
+        rssis[rssi] = rssis.get(rssi, 0) + 1
+    print("rssi statistic:")
+    for rssi in rssis:
+        print(rssi, ":", rssis[rssi])
 elif test == "None":
     # do nothing
     None
