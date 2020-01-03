@@ -10,7 +10,7 @@ def cw(f):
     sigfox.cw( f, False)
 
 pycom.heartbeat(False)
-sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=Sigfox.RCZ2 )
+sigfox = Sigfox(mode=Sigfox.SIGFOX, rcz=Sigfox.RCZ3 )
 print(sigfox.frequencies())
 s = 10
 
