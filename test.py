@@ -323,6 +323,27 @@ elif test == "MyDownlink":
     print("rssi statistic:")
     for rssi in rssis:
         print(rssi, ":", rssis[rssi])
+elif test == "MyMockupDLProtocol":
+    # an attempt to reimplement the DUT side of the "DL-Protocol" test of RSA
+    # doesn't work completely, the frames come out with Hmac not ok and RSA doesn't send the downlink
+    print("reconfiguring socket to RX mode (ie up AND down)")
+    s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, True)
+
+    print("reconfiguring sigfox to use public key")
+    sigfox.public_key(True)
+
+    retval = send(bytes([0x30, 0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3A, 0x3B]))
+    print("sent after", utime.time() -x, "seconds")
+    print("retval", retval)
+
+    x = utime.time()
+    received = s.recv(8)
+    print("received after", utime.time() -x, "seconds")
+    print("received:", ubinascii.hexlify(received))
+
+    rssi = sigfox.rssi()
+    print("rssi", rssi)
+
 elif test == "None":
     # do nothing
     None
