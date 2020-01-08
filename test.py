@@ -307,7 +307,8 @@ elif test == "MyDownlink":
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, True)
     print("reconfiguring sigfox to use public key")
     sigfox.public_key(True)
-    for b in range(0, 4):
+    num_messages = 1
+    for b in range(0, num_messages):
         x = utime.time()
         d = b % ( 0xff + 1 )
         retval = send(bytes([0xdd, r, d]))
@@ -320,9 +321,29 @@ elif test == "MyDownlink":
         rssi = sigfox.rssi()
         print("rssi", rssi)
         rssis[rssi] = rssis.get(rssi, 0) + 1
+    median_number = num_messages / 2
+    print("median_number=", median_number, "(", num_messages, ")")
+    keys = sorted(list(rssis))
+    ct = 0
+    median_found = False
+    median = 0
     print("rssi statistic:")
-    for rssi in rssis:
-        print(rssi, ":", rssis[rssi])
+    for rssi in keys:
+        ct += rssis[rssi]
+        if not median_found and ct >= median_number:
+            median_found = True
+            median = rssi
+        print("  ", rssi, ":", rssis[rssi])
+    cumulated_delta = 0
+    for rssi in keys:
+        delta = abs(median - rssi)
+        cumulated_delta += delta * rssis[rssi]
+
+    print("median rssi=", median)
+    print("cumulated delta=", cumulated_delta)
+    print("delta=", cumulated_delta / num_messages)
+
+
 elif test == "MyMockupDLProtocol":
     # an attempt to reimplement the DUT side of the "DL-Protocol" test of RSA
     # doesn't work completely, the frames come out with Hmac not ok and RSA doesn't send the downlink
