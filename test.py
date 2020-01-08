@@ -7,25 +7,28 @@ import ubinascii
 import pycom
 import machine
 
+utime.sleep(2)
+
 ##############################################################
 ## select the test you want to run by (un)commenting
 
 ## for use with Sigfox Radio Signal Analyzer
 ## Uplink
-# test = "UL - RF" # ManualVerdict, same for Vnom/Vmin/Vmax
+#test = "UL - RF" # ManualVerdict, same for Vnom/Vmin/Vmax
 # test = "UL - Protocol" # [2 minutes]
 # test = "UL - Non Volatile Memory" # ManualVerdict
 # test = "UL - Public Key"
-# test = "UL - Frequency Distribution" # [<= 15 minutes]
+# test = "UL - Frequency Distribution" # [<= 15 minutes] (14:26)
 # test = "UL - Frequency Synthesis"  ## [<= 2 minutes]
 ## Downlink:
-#test = "DL - Downlink" # Use for any of "DL-Protocol", "DL-Start of Listening" and "DL-End of Listening"
+# test = "DL - Downlink" # Use for any of "DL-Protocol", "DL-Start of Listening" and "DL-End of Listening"
 # test = "DL - Link Budget" # DL-Link Budget [~ 5 minutes, then test is completed in RSA and you can reset the DUT]
-# test = "DL - GFSK Receiver" # ManualVerdict [30 seconds], Test Mode TX-BPSK has to be executed just before this test.
+#test = "DL - GFSK Receiver" # ManualVerdict [30 seconds], Test Mode TX-BPSK has to be executed just before this test.
 
 ## for use with Sigfox Network Emulator
 test = "MyTest"
 # test = "MyDownlink"
+# test = "MyMockupDLProtocol"
 
 # test = "None"
 
@@ -33,7 +36,7 @@ test = "MyTest"
 
 ##############################################################
 # ## select the region
-RCZ = Sigfox.RCZ1
+RCZ = Sigfox.RCZ3
 
 
 # RCZ1
@@ -151,7 +154,7 @@ def send(msg):
             sleep(wait - wait_so_far)
     else:
         pass
-        #sleep(1)
+        sleep(1)
     print("send", ubinascii.hexlify(msg))
     pycom.rgbled(rgb_send)
     last = utime.time()
