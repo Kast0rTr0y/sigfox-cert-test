@@ -40,14 +40,31 @@ RCZ = Sigfox.RCZ1
 #   Europe, Oman & South Africa.
 #   UL= 868130000 Hz
 #   DL= 869525000 Hz
+#   DR= 100bps
+#   Sigfox high limit recommendation: 16dBm
+#   Low limit: 12dBm
 # RCZ2
 #   USA, Mexico & Brazil.
 #   UL= 902200000 Hz
 #   DL= 905200000 Hz
+#   DR= 600bps
+#   Sigfox high limit recommendation: 24dBm
+#   Low limit: 20dBm
 # RCZ3
 #   Japan.
+#   ARIB
+#   UL= 923200000
+#   DL= 922200000
+#   DR= 100bps
+#   Sigfox high limit recommendation: 16dBm
+#   Low limit: 12dBm
 # RCZ4
 #   Australia, New Zealand, Singapore, Taiwan, Hong Kong, Colombia & Argentina.
+#   UL= 920800000
+#   DL= 922300000
+#   DR= 600bps
+#   Sigfox high limit recommendation: 24dBm
+#   Low limit: 20dBm
 
 # test mode constants for sigfox api
 SFX_TEST_MODE_TX_BPSK     = 0
