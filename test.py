@@ -291,13 +291,24 @@ elif test == "MyTest":
     # #send(bytes([1,2,3,4,5,6,7,8,9,0xa,0xb,0xc]))
     # send(bytes([7]))
     # print("b")
+    # if RCZ == Sigfox.RCZ3:
+    #     sigfox.config((0x1, 0x2ee0, 0x100))
+    print(sigfox.config())
     r = machine.rng() & 0xff
-    for b in range(0, 2):
+    print("reconfiguring sigfox to use public key")
+    sigfox.public_key(True)
+    for b in range(0, 1):
         x = utime.time()
         d = b % ( 0xff + 1 )
-        retval = send(bytes([0xaa, r, d]))
-        print("sent after", utime.time() -x, "seconds")
-        print("retval", retval)
+        try:
+            retval = send(bytes([0xac, r, d]))
+            print("sent after", utime.time() -x, "seconds")
+            print("retval", retval)
+        except OSError as e:
+            print("Exception caught:", e)
+
+        rssi = sigfox.rssi()
+        print("rssi", rssi)
         #sleep(2)
 elif test == "MyDownlink":
     r = machine.rng() & 0xff
