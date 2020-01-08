@@ -100,6 +100,7 @@ print("sigfox ID:", ubinascii.hexlify(sigfox.id()))
 print("sigfox PAC:", ubinascii.hexlify(sigfox.pac()))
 print("sigfox region:", RCZ)
 print("sigfox frequencies:", sigfox.frequencies())
+print("sigfox rssi offset:", sigfox.rssi_offset())
 print("sigfox info:")
 sigfox.info() # normally prints nothing, but patched FW prints private key
 #if RCZ == Sigfox.RCZ3:
