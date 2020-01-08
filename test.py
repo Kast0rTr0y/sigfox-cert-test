@@ -311,13 +311,19 @@ elif test == "MyDownlink":
     for b in range(0, num_messages):
         x = utime.time()
         d = b % ( 0xff + 1 )
-        retval = send(bytes([0xdd, r, d]))
-        print("sent after", utime.time() -x, "seconds")
-        print("retval", retval)
-        x = utime.time()
-        received = s.recv(8)
-        print("received after", utime.time() -x, "seconds")
-        print("received:", ubinascii.hexlify(received))
+        print("sending message nr", b, "of", num_messages)
+        try:
+            retval = send(bytes([0xdd, r, d]))
+            print("sent after", utime.time() -x, "seconds")
+            print("retval", retval)
+            x = utime.time()
+            received = s.recv(8)
+            print("received after", utime.time() -x, "seconds")
+            print("received:", ubinascii.hexlify(received))
+        except OSError as e:
+            pycom.rgbled(0x550000)
+            print("Exception caught:", e)
+
         rssi = sigfox.rssi()
         print("rssi", rssi)
         rssis[rssi] = rssis.get(rssi, 0) + 1
