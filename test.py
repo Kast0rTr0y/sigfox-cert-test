@@ -261,14 +261,10 @@ elif test == "UL - Protocol":
 # elif test == "TX-PROTOCOL Uplink Encrypted Payload":
 #     print("todo")
 elif test == "UL - Non Volatile Memory":
-    if RCZ == Sigfox.RCZ2 or RCZ == Sigfox.RCZ4:
-        # send one bit
-        send_bit(True)
-    else:
-        # if RCZ == Sigfox.RCZ3:
-        #     sigfox.config((0x1, 0x2ee0, 0x100))
-        # send one byte
-        send(bytes([8]))
+    #NB: in RZC2 and 4 "Switch the DUT in Short Message Configuration" is I think simply the default operation mode
+    # see modsigfox.c modsigfox_api_init() calls to SIGFOX_API_set_std_config(RC2_SM_CONFIG), SM as in short message
+    # send one byte
+    send(bytes([8]))
 elif test == "UL - Public Key":
     sigfox.public_key(True)
     # if RCZ == Sigfox.RCZ3:
