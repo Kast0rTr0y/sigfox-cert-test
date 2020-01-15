@@ -6,6 +6,7 @@ import utime
 import ubinascii
 import pycom
 import machine
+import sys
 
 utime.sleep(2)
 
@@ -87,6 +88,7 @@ SFX_TEST_MODE_TX_SYNTH    = 5
 # pycom.wdt_on_boot(False)
 
 
+print("sys.platform:", sys.platform)
 print("machine.unique_id:", ubinascii.hexlify( machine.unique_id() ))
 print("machine.freq:", machine.freq() )
 print("machine.info:")
