@@ -127,6 +127,19 @@ print("test:", test)
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 wait = 24 # how many seconds do we need to wait after every second frame (starting after the first) in RCZ2 and 4
 last = -wait # when was the last sigfox message sent
 rgb_send = 0x110000
@@ -170,6 +183,10 @@ def send(msg):
     return r
 
 def send_bit(b):
+    if b:
+        print("send_bit True")
+    else:
+        print("send_bit False")
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_BIT, b)
     pycom.rgbled(rgb_send)
     s.send('')
@@ -177,6 +194,7 @@ def send_bit(b):
     sleep(1)
 
 def send_oob():
+    print("send_OOB")
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_OOB, True)
     pycom.rgbled(rgb_send)
     s.send('')
@@ -187,9 +205,17 @@ def send_oob():
 
 
 def test_mode(t,c):
+    print("test_mode(", t, ",", c, ")")
     pycom.rgbled(rgb_test)
     sigfox.test_mode(t,c)
     pycom.rgbled(rgb_idle)
+
+
+def config(c):
+    print("config(", c, ")")
+    sigfox.config(c)
+
+
 
 
 
@@ -201,6 +227,8 @@ def test_mode(t,c):
 
 
 ################################################################################
+#######################           Uplink tests           #######################
+################################################################################
 # run test
 start = utime.time()
 pycom.heartbeat(False)
@@ -208,15 +236,12 @@ if test == "UL - RF":
     test_mode( SFX_TEST_MODE_TX_BPSK, 1)
 elif test == "UL - Protocol":
     # send a single bit: 0
-    print("send False")
     send_bit(False)
 
     # send a single bit: 1
-    print("send True")
     send_bit(True)
 
     # send an out of bound msg
-    print("send OOB")
     # use the socket to send a Sigfox Out Of Band message
     send_oob()
 
@@ -263,6 +288,19 @@ elif test == "UL - Frequency Synthesis":
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#######################          Downlink tests          #######################
 ################################################################################
 elif test == "DL - Downlink":
     # if RCZ == Sigfox.RCZ3:
@@ -295,6 +333,20 @@ elif test == "DL - GFSK Receiver":
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#######################      Network Emulator tests      #######################
 ################################################################################
 elif test == "MyTest":
     # print("a")
@@ -303,7 +355,6 @@ elif test == "MyTest":
     # print("b")
     # if RCZ == Sigfox.RCZ3:
     #     sigfox.config((0x1, 0x2ee0, 0x100))
-    print(sigfox.config())
     r = machine.rng() & 0xff
     print("reconfiguring sigfox to use public key")
     sigfox.public_key(True)
