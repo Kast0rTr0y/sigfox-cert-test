@@ -395,3 +395,7 @@ else:
 
 # pycom.heartbeat(True)
 print("test completed after", utime.time() - start, "seconds")
+
+if sys.platform == "SiPy":
+    # seems SiPy hangs after running a script from pymakr ... maybe a bug in atom/pymakr?
+    machine.reset()
