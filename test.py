@@ -8,8 +8,6 @@ import pycom
 import machine
 import sys
 
-utime.sleep(2)
-
 ##############################################################
 ## select the test you want to run by (un)commenting
 
