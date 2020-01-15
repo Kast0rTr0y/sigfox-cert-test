@@ -104,8 +104,6 @@ print("sigfox PAC:", ubinascii.hexlify(sigfox.pac()))
 print("sigfox region:", RCZ)
 print("sigfox frequencies:", sigfox.frequencies())
 print("sigfox rssi offset:", sigfox.rssi_offset())
-print("sigfox info:")
-sigfox.info() # normally prints nothing, but patched FW prints private key
 #if RCZ == Sigfox.RCZ3:
 #    sigfox.config((0x1, 0x2ee0, 0x100))
 # sigfox.config((3,5000,0))
@@ -159,6 +157,15 @@ def send(msg):
     pycom.rgbled(rgb_send)
     last = utime.time()
     r = s.send(msg)
+    # print("info", sigfox.info())
+    if RCZ == Sigfox.RCZ1:
+        pass
+    elif RCZ == Sigfox.RCZ3:
+        print("frames sent:", sigfox.info()[0])
+        print("cs attempts:", sigfox.info()[1])
+    else:
+        print("FCC channel not default", sigfox.info()[0])
+        print("Number of free micro channel", sigfox.info()[1])
     pycom.rgbled(rgb_idle)
     return r
 
