@@ -26,6 +26,7 @@ import sys
 
 ## for use with Sigfox Network Emulator
 # test = "NE-Uplink"
+# test = "NE-Uplink-One-Bit"
 # test = "NE-Downlink"
 # test = "MyMockupDLProtocol"
 
@@ -371,6 +372,13 @@ elif test == "NE-Uplink":
         rssi = sigfox.rssi()
         print("rssi", rssi)
         #sleep(2)
+elif test == "NE-Uplink-One-Bit":
+    c_cur = sigfox.config()
+    print("c_cur", sigfox.config())
+    c_new = (1, c_cur[1], 100)
+    sigfox.config(c_new)
+    print("c_new", sigfox.config())
+    send_bit(True)
 elif test == "NE-Downlink":
     r = machine.rng() & 0xff
     rssis = {}
