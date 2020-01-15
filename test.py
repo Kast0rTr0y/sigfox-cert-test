@@ -25,8 +25,8 @@ import sys
 #test = "DL - GFSK Receiver" # ManualVerdict [30 seconds], Test Mode TX-BPSK has to be executed just before this test.
 
 ## for use with Sigfox Network Emulator
-test = "MyTest"
-# test = "MyDownlink"
+# test = "NE-Uplink"
+# test = "NE-Downlink"
 # test = "MyMockupDLProtocol"
 
 # test = "None"
@@ -348,7 +348,7 @@ elif test == "DL - GFSK Receiver":
 ################################################################################
 #######################      Network Emulator tests      #######################
 ################################################################################
-elif test == "MyTest":
+elif test == "NE-Uplink":
     # print("a")
     # #send(bytes([1,2,3,4,5,6,7,8,9,0xa,0xb,0xc]))
     # send(bytes([7]))
@@ -371,7 +371,7 @@ elif test == "MyTest":
         rssi = sigfox.rssi()
         print("rssi", rssi)
         #sleep(2)
-elif test == "MyDownlink":
+elif test == "NE-Downlink":
     r = machine.rng() & 0xff
     rssis = {}
     # configure socket as uplink + downlink
