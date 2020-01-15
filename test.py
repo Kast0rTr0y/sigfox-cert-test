@@ -19,6 +19,7 @@ import sys
 # test = "UL - Public Key"
 # test = "UL - Frequency Distribution" # [<= 15 minutes] (14:26)
 # test = "UL - Frequency Synthesis"  ## [<= 2 minutes]
+# test = "UL - Repeat Timeout" # LBT
 ## Downlink:
 # test = "DL - Downlink" # Use for any of "DL-Protocol", "DL-Start of Listening" and "DL-End of Listening"
 # test = "DL - Link Budget" # DL-Link Budget [~ 5 minutes, then test is completed in RSA and you can reset the DUT]
@@ -282,6 +283,10 @@ elif test == "UL - Frequency Distribution":
     test_mode(SFX_TEST_MODE_TX_PROTOCOL, 14)
     # Loop 0 to (config & 0x7F)
     # bit 7 causes a delay between the frames
+elif test == "UL - Repeat Timeout":
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
+    test_mode(SFX_TEST_MODE_TX_PROTOCOL, 1)
 elif test == "UL - Frequency Synthesis":
     if RCZ == Sigfox.RCZ3:
         config(rcz3_config_test_mode)
