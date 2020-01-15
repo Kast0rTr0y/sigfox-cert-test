@@ -111,7 +111,7 @@ print("sigfox config:", sigfox.config()) # after reset RCZ3 defaults to (3, 5000
 
 # by default put the device into private key mode
 sigfox.public_key(False)
-print("sigfox public key", sigfox.public_key())
+print("sigfox public key:", sigfox.public_key())
 
 s = socket.socket(socket.AF_SIGFOX, socket.SOCK_RAW)
 s.setblocking(True)
