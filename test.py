@@ -234,7 +234,7 @@ def config(c):
 start = utime.time()
 pycom.heartbeat(False)
 if test == "UL - RF":
-    test_mode( SFX_TEST_MODE_TX_BPSK, 1)
+    test_mode( SFX_TEST_MODE_TX_BPSK, 3)
 elif test == "UL - Protocol":
     # send a single bit: 0
     send_bit(False)
