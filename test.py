@@ -363,19 +363,22 @@ elif test == "NE-Uplink":
     r = machine.rng() & 0xff
     print("reconfiguring sigfox to use public key")
     sigfox.public_key(True)
-    for b in range(0, 1):
+    num_messages = 1
+    for b in range(0, num_messages):
         x = utime.time()
         d = b % ( 0xff + 1 )
+        print("sending message nr", b, "of", num_messages)
         try:
             retval = send(bytes([0xac, r, d]))
             print("sent after", utime.time() -x, "seconds")
             print("retval", retval)
         except OSError as e:
+            pycom.rgbled(0x550000)
             print("Exception caught:", e)
 
         rssi = sigfox.rssi()
         print("rssi", rssi)
-        #sleep(2)
+        #sleep(5)
 elif test == "NE-Uplink-One-Bit":
     send_bit(True)
 elif test == "NE-Downlink":
