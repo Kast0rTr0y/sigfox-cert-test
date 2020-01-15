@@ -105,10 +105,10 @@ print("sigfox PAC:", ubinascii.hexlify(sigfox.pac()))
 print("sigfox region:", RCZ)
 print("sigfox frequencies:", sigfox.frequencies())
 print("sigfox rssi offset:", sigfox.rssi_offset())
-#if RCZ == Sigfox.RCZ3:
-#    sigfox.config((0x1, 0x2ee0, 0x100))
-# sigfox.config((3,5000,0))
-print("sigfox config:", sigfox.config()) # after reset RCZ3 defaults to (3, 5000, 0)
+# sigfox config
+rcz3_config_test_mode = (1, 0x2ee0, 0x100) # ie, 1 retry, 12sec timeout, 3rd config is always ignored in R3
+# rcz3_config_default = (3,   5000, 0x100) # ie, 3 retries, 5sec timeout
+print("sigfox config:", sigfox.config())
 
 # by default put the device into private key mode
 sigfox.public_key(False)
@@ -236,6 +236,9 @@ pycom.heartbeat(False)
 if test == "UL - RF":
     test_mode( SFX_TEST_MODE_TX_BPSK, 3)
 elif test == "UL - Protocol":
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
+
     # send a single bit: 0
     send_bit(False)
 
@@ -263,23 +266,25 @@ elif test == "UL - Protocol":
 elif test == "UL - Non Volatile Memory":
     #NB: in RZC2 and 4 "Switch the DUT in Short Message Configuration" is I think simply the default operation mode
     # see modsigfox.c modsigfox_api_init() calls to SIGFOX_API_set_std_config(RC2_SM_CONFIG), SM as in short message
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
     # send one byte
     send(bytes([8]))
 elif test == "UL - Public Key":
     sigfox.public_key(True)
-    # if RCZ == Sigfox.RCZ3:
-    #     sigfox.config((0x1, 0x2ee0, 0x100))
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
     send(bytes([1]))
     sigfox.public_key(False)
 elif test == "UL - Frequency Distribution":
-    # if RCZ == Sigfox.RCZ3:
-    #     sigfox.config((0x1, 0x2ee0, 0x100))
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
     test_mode(SFX_TEST_MODE_TX_PROTOCOL, 14)
     # Loop 0 to (config & 0x7F)
     # bit 7 causes a delay between the frames
 elif test == "UL - Frequency Synthesis":
-    # if RCZ == Sigfox.RCZ3:
-    #     sigfox.config((0x1, 0x2ee0, 0x100))
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
     test_mode(SFX_TEST_MODE_TX_SYNTH, 0)
 
 
@@ -300,12 +305,12 @@ elif test == "UL - Frequency Synthesis":
 #######################          Downlink tests          #######################
 ################################################################################
 elif test == "DL - Downlink":
-    # if RCZ == Sigfox.RCZ3:
-    #     sigfox.config((0x1, 0x2ee0, 0x100))
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
     test_mode(SFX_TEST_MODE_RX_PROTOCOL, 1)
 elif test == "DL - Link Budget":
-    # if RCZ == Sigfox.RCZ3:
-    #     sigfox.config((0x1, 0x2ee0, 0x100))
+    if RCZ == Sigfox.RCZ3:
+        config(rcz3_config_test_mode)
     test_mode(SFX_TEST_MODE_RX_SENSI, 31) # 14:11
     # Loop 0 to (config x 10),
     # config should be 100 as per test protocol,
@@ -350,8 +355,6 @@ elif test == "NE-Uplink":
     # #send(bytes([1,2,3,4,5,6,7,8,9,0xa,0xb,0xc]))
     # send(bytes([7]))
     # print("b")
-    # if RCZ == Sigfox.RCZ3:
-    #     sigfox.config((0x1, 0x2ee0, 0x100))
     r = machine.rng() & 0xff
     print("reconfiguring sigfox to use public key")
     sigfox.public_key(True)
@@ -369,11 +372,6 @@ elif test == "NE-Uplink":
         print("rssi", rssi)
         #sleep(2)
 elif test == "NE-Uplink-One-Bit":
-    c_cur = sigfox.config()
-    print("c_cur", sigfox.config())
-    c_new = (1, c_cur[1], 100)
-    sigfox.config(c_new)
-    print("c_new", sigfox.config())
     send_bit(True)
 elif test == "NE-Downlink":
     r = machine.rng() & 0xff
