@@ -374,7 +374,7 @@ elif test == "NE-Uplink":
             print("retval", retval)
         except OSError as e:
             pycom.rgbled(0x550000)
-            print("Exception caught:", e)
+            print("Exception caught:") # , e)
 
         rssi = sigfox.rssi()
         print("rssi", rssi)
@@ -463,5 +463,8 @@ else:
 print("test completed after", utime.time() - start, "seconds")
 
 if sys.platform == "SiPy":
+    sleep(5)
+    print("")
+    print("resetting")
     # seems SiPy hangs after running a script from pymakr ... maybe a bug in atom/pymakr?
     machine.reset()
