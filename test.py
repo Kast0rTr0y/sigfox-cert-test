@@ -172,7 +172,7 @@ def pre_send_sleep():
 
 def send(msg):
     global last
-    pre_send_sleep()
+    #pre_send_sleep()
     print("send", ubinascii.hexlify(msg))
     pycom.rgbled(rgb_send)
     last = utime.time()
@@ -191,7 +191,7 @@ def send(msg):
 
 def send_bit(b):
     global last
-    pre_send_sleep()
+    #pre_send_sleep()
     if b:
         print("send_bit True")
     else:
@@ -204,7 +204,7 @@ def send_bit(b):
 
 def send_oob():
     global last
-    pre_send_sleep()
+    #pre_send_sleep()
     print("send_OOB")
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_OOB, True)
     pycom.rgbled(rgb_send)
