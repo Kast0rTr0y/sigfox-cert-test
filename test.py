@@ -143,8 +143,8 @@ print("test:", test)
 
 
 
-wait = 24 # how many seconds do we need to wait after every second frame (starting after the first) in RCZ2 and 4
-last = -wait # when was the last sigfox message sent
+wait = 24 # how many seconds do we need to wait after every second packet (starting after the first) in RCZ2 and 4
+last = -wait # when was the last sigfox message sent. init to -wait, so we don't wait for the first packet
 rgb_send = 0x110000
 rgb_idle = 0x000a00
 rgb_test = 0x000011
@@ -158,17 +158,21 @@ def sleep(s):
     print("")
 
 
-def send(msg):
+def pre_send_sleep():
     global last
     global wait
-    global s
     if RCZ == Sigfox.RCZ2 or RCZ == Sigfox.RCZ4:
         wait_so_far = utime.time() - last
+        # print("pss", utime.time(), last, wait_so_far, wait)
         if wait_so_far < wait:
             sleep(wait - wait_so_far)
     else:
         pass
         sleep(1)
+
+def send(msg):
+    global last
+    pre_send_sleep()
     print("send", ubinascii.hexlify(msg))
     pycom.rgbled(rgb_send)
     last = utime.time()
@@ -186,23 +190,27 @@ def send(msg):
     return r
 
 def send_bit(b):
+    global last
+    pre_send_sleep()
     if b:
         print("send_bit True")
     else:
         print("send_bit False")
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_BIT, b)
     pycom.rgbled(rgb_send)
+    last = utime.time()
     s.send('')
     pycom.rgbled(rgb_idle)
-    sleep(1)
 
 def send_oob():
+    global last
+    pre_send_sleep()
     print("send_OOB")
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_OOB, True)
     pycom.rgbled(rgb_send)
+    last = utime.time()
     s.send('')
     pycom.rgbled(rgb_idle)
-    sleep(1)
     # disable Out-Of-Band to use the socket normally
     s.setsockopt(socket.SOL_SIGFOX, socket.SO_OOB, False)
 
