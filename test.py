@@ -22,6 +22,7 @@ test = "UL - RF"                     # Cold test. Manual verdict. aka "BPSK". us
 # test = "UL - Frequency Synthesis"    # [<= 2 minutes]
 ## Downlink:
 # test = "DL - Downlink"               # Use for any of "DL-Protocol", "DL-Start of Listening" and "DL-End of Listening"
+# test = "DL - Downlink - End of Listening Window"  # "manual" implementation of EoLW test mode
 # test = "DL - Link Budget"            # DL-Link Budget [~ 5 minutes, then test is completed in RSA and you can reset the DUT]
 # test = "DL - GFSK Receiver"          # Manual verdict. [30 seconds] Test Mode TX-BPSK has to be executed just before this test.
 
@@ -314,6 +315,36 @@ elif test == "DL - Downlink":
     if RCZ == Sigfox.RCZ3:
         config(rcz3_config_test_mode)
     test_mode(SFX_TEST_MODE_RX_PROTOCOL, 1)
+elif test == "DL - Downlink - End of Listening Window":
+    # sigfox.public_key(True)
+    print("reconfiguring socket to RX mode (ie up AND down)")
+    s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, True)
+    try:
+        x = utime.time()
+        retval = send(bytes([0x40, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4A, 0x4B ]))
+        print("sent after", utime.time() -x, "seconds")
+        print("retval", retval)
+        x = utime.time()
+        received = s.recv(8)
+        print("received after", utime.time() -x, "seconds")
+        print("received:", ubinascii.hexlify(received))
+        received_ok = True
+        for i in range(0, len(received)):
+            if received[i] == 0x30 + i:
+                print(i, hex(received[i]), "ok")
+            else:
+                print(i, hex(received[i]), "NOT OK")
+                received_ok = False
+        print("reconfiguring socket to TX mode (ie up ONLY)")
+        s.setsockopt(socket.SOL_SIGFOX, socket.SO_RX, False)
+        if received_ok:
+            send(bytes([0x01]))
+        else:
+            send(bytes([0x00]))
+
+    except OSError as e:
+        pycom.rgbled(0x550000)
+        print("Exception caught:", e)
 elif test == "DL - Link Budget":
     if RCZ == Sigfox.RCZ3:
         config(rcz3_config_test_mode)
