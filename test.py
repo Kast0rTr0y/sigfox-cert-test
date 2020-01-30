@@ -235,7 +235,8 @@ def config(c):
 start = utime.time()
 pycom.heartbeat(False)
 if test == "UL - RF":
-    test_mode( SFX_TEST_MODE_TX_BPSK, 3)
+    # test_mode( SFX_TEST_MODE_TX_BPSK, 3)
+    send(bytes([0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA]))
 elif test == "UL - Protocol":
     if RCZ == Sigfox.RCZ3:
         config(rcz3_config_test_mode)
