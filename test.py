@@ -48,6 +48,7 @@ RCZ = Sigfox.RCZ3
 #   DR= 100bps
 #   Sigfox high limit recommendation: 16dBm
 #   Low limit: 12dBm
+#   Spectrum Access Method: DC 1%
 # RCZ2
 #   USA, Mexico & Brazil.
 #   UL= 902200000 Hz
@@ -55,7 +56,8 @@ RCZ = Sigfox.RCZ3
 #   DR= 600bps
 #   Sigfox high limit recommendation: 24dBm
 #   Low limit: 20dBm
-# RCZ3
+#   Spectrum Access Method: FH
+# RCZ3c
 #   Japan.
 #   ARIB
 #   UL= 923200000
@@ -63,6 +65,7 @@ RCZ = Sigfox.RCZ3
 #   DR= 100bps
 #   Sigfox high limit recommendation: 16dBm
 #   Low limit: 12dBm
+#   Spectrum Access Method: LBT
 # RCZ4
 #   Australia, New Zealand, Singapore, Taiwan, Hong Kong, Colombia & Argentina.
 #   UL= 920800000
@@ -70,6 +73,7 @@ RCZ = Sigfox.RCZ3
 #   DR= 600bps
 #   Sigfox high limit recommendation: 24dBm
 #   Low limit: 20dBm
+#   Spectrum Access Method: FH
 
 # test mode constants for sigfox api
 SFX_TEST_MODE_TX_BPSK     = 0
