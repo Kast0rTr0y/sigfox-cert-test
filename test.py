@@ -41,39 +41,47 @@ test = "UL - RF"                     # Cold test. Manual verdict. aka "BPSK". us
 RCZ = Sigfox.RCZ3
 
 
-# RCZ1
-#   Europe, Oman & South Africa.
+
+# RC1:
+#     Europe: Austria, Belgium, Bulgaria, Croatia, Czech Republic, Denmark, Estonia, Finland, France, Germany, Hungary, Ireland, Italy, Latvia, Liechtenstein, Lithuania, Luxembourg, Malta, Netherlands, Norway, Poland, Portugal, Romania, Serbia, Slovakia, Slovenia, Spain, Sweden, Switzerland, United Kingdom.
+#     Overseas France: French Guiana, French Polynesia, Guadeloupe, Martinique, Mauritius, Mayotte, New Caledonia, Reunion.
+#     Middle East and Africa: Botswana, Kenya, Nigeria, Oman, South Africa, Swaziland, Tunisia, United Arab Emirates.
 #   UL= 868130000 Hz
 #   DL= 869525000 Hz
 #   DR= 100bps
 #   Sigfox high limit recommendation: 16dBm
 #   Low limit: 12dBm
 #   Spectrum Access Method: DC 1%
-# RCZ2
-#   USA, Mexico & Brazil.
+# RC2: Brazil, Canada, Mexico, Puerto Rico, USA.
 #   UL= 902200000 Hz
 #   DL= 905200000 Hz
 #   DR= 600bps
 #   Sigfox high limit recommendation: 24dBm
 #   Low limit: 20dBm
 #   Spectrum Access Method: FH
-# RCZ3c
-#   Japan.
-#   ARIB
+# RC3: Japan.
+#   aka "RCZ3c"
+#   ARIB Association of Radio Industries and Businesses - standardization organization in Japan.
 #   UL= 923200000
 #   DL= 922200000
 #   DR= 100bps
 #   Sigfox high limit recommendation: 16dBm
 #   Low limit: 12dBm
 #   Spectrum Access Method: LBT
-# RCZ4
-#   Australia, New Zealand, Singapore, Taiwan, Hong Kong, Colombia & Argentina.
+# RC4:
+#     Latin America: Argentina, Chile, Colombia, Costa Rica, Ecuador, El Salvador, Guatemala, Honduras, Nicaragua, Panama, Peru, Trinidad & Tobago, Uruguay.
+#     Asia Pacific: Australia, Hong Kong, Indonesia, Malaysia, New Zealand, Singapore, Taiwan, Thailand.
 #   UL= 920800000
 #   DL= 922300000
 #   DR= 600bps
 #   Sigfox high limit recommendation: 24dBm
 #   Low limit: 20dBm
 #   Spectrum Access Method: FH
+# RC5: South Korea.
+# RC6: India.
+# RC7: Russia. (This is a draft release subject to potential change until final release expected in S1 2020.)
+
+
 
 # test mode constants for sigfox api
 SFX_TEST_MODE_TX_BPSK     = 0
